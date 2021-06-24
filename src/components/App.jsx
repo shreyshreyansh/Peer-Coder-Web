@@ -7,7 +7,7 @@ import io from "socket.io-client";
 import Peer from "peerjs";
 import "../css/App.css";
 const myPeer = new Peer();
-const socket = io("http://localhost:4000");
+const socket = io("https://peaceful-depths-33963.herokuapp.com/");
 const peers = {};
 
 class App extends Component {
