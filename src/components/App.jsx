@@ -4,10 +4,13 @@ import VideoBar from "./VideoBar";
 import Editor from "./Editor";
 import Footer from "./Footer";
 import io from "socket.io-client";
+// eslint-disable-next-line
 import Peer from "peerjs";
 import axios from "axios";
 import "../css/App.css";
 const myPeer = new Peer();
+// https://peaceful-depths-33963.herokuapp.com/
+// http://localhost:4000
 const socket = io("https://peaceful-depths-33963.herokuapp.com/");
 const peers = {};
 
@@ -18,9 +21,11 @@ class App extends Component {
       userId: "",
       stream: {},
       peers: [],
+      mode: "java",
       code: "",
       input: "",
       output: "",
+      status: "RUN",
     };
     this.handleVideoToggle = this.handleVideoToggle.bind(this);
     this.handleAudioToggle = this.handleAudioToggle.bind(this);
@@ -28,6 +33,7 @@ class App extends Component {
     this.handleChangeInput = this.handleChangeInput.bind(this);
     this.handleChangeOutput = this.handleChangeOutput.bind(this);
     this.handleRunClick = this.handleRunClick.bind(this);
+    this.handleChangeMode = this.handleChangeMode.bind(this);
   }
   componentDidMount() {
     myPeer.on("open", (id) => {
@@ -70,6 +76,9 @@ class App extends Component {
           socket.on("receive-data-for-new-user", (payload) => {
             this.updateStateFromSockets(payload);
           });
+          socket.on("mode-change-receive", (payload) => {
+            this.updateModeFromSockets(payload);
+          });
         });
     });
     socket.on("user-disconnected", (userId) => {
@@ -81,12 +90,14 @@ class App extends Component {
       newCode: this.state.code,
       newInput: this.state.input,
       newOutput: this.state.output,
+      newMode: this.state.mode,
     });
   }
   updateStateFromSockets(payload) {
     this.setState({ code: payload.newCode });
     this.setState({ input: payload.newInput });
     this.setState({ output: payload.newOutput });
+    this.setState({ mode: payload.newMode });
   }
   updateCodeFromSockets(payload) {
     this.setState({ code: payload.newCode });
@@ -96,6 +107,9 @@ class App extends Component {
   }
   updateOutputFromSockets(payload) {
     this.setState({ output: payload.newOutput });
+  }
+  updateModeFromSockets(payload) {
+    this.setState({ mode: payload.mode });
   }
   connectToNewUser(userId, stream) {
     const call = myPeer.call(userId, stream);
@@ -167,10 +181,13 @@ class App extends Component {
       newOutput: newOutput,
     });
   }
-  handleRunClick(mode) {
+  handleRunClick() {
+    this.setState({
+      status: `RUNNING <i class="fas fa-spinner fa-spin"></i>`,
+    });
     const params = {
       source_code: this.state.code,
-      language: mode,
+      language: this.state.mode,
       input: this.state.input,
       api_key: "guest",
     };
@@ -179,8 +196,8 @@ class App extends Component {
         id: res.data.id,
         api_key: "guest",
       });
-      // your callback gets executed automatically once the data is received
       var callback = (res, error) => {
+        this.setState({ status: "RUN" });
         // consume data
         if (error) {
           console.error(error);
@@ -190,7 +207,7 @@ class App extends Component {
         if (res.data.stdout) output += res.data.stdout;
         if (res.data.stderr) output += res.data.stderr;
         if (res.data.build_stderr) output += res.data.build_stderr;
-        this.setState({ output: output });
+        this.handleChangeOutput(output);
       };
 
       request(10, callback);
@@ -225,7 +242,10 @@ class App extends Component {
           });
       }
     });
-    //console.log(params);
+  }
+  handleChangeMode(mode) {
+    this.setState({ mode: mode });
+    socket.emit("mode-change-send", { mode: mode });
   }
 
   render() {
@@ -239,13 +259,16 @@ class App extends Component {
         />
         <VideoBar peersStream={this.state.peers} userId={this.state.userId} />
         <Editor
+          mode={this.state.mode}
           code={this.state.code}
           input={this.state.input}
           output={this.state.output}
+          status={this.state.status}
           onChangeCode={this.handleChangeCode}
           onChangeInput={this.handleChangeInput}
           onChangeOutput={this.handleChangeOutput}
           handleRunClick={this.handleRunClick}
+          onChangeMode={this.handleChangeMode}
         />
         <Footer />
       </React.Fragment>

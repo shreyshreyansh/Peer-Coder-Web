@@ -20,7 +20,7 @@ class ConfigBar extends Component {
           selection
           options={this.props.languages}
           onChange={(e, data) => this.props.handleOnChange(e, data)}
-          defaultValue={this.props.defaultMode}
+          value={this.props.mode}
         />
         <Dropdown
           className="dropdown"
@@ -31,7 +31,7 @@ class ConfigBar extends Component {
           defaultValue={this.props.fontSizes[4].value}
         />
         <button className="run" onClick={() => this.props.handleRunClick()}>
-          Run
+          <div dangerouslySetInnerHTML={{ __html: this.props.status }} />
         </button>
       </div>
     );

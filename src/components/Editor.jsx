@@ -63,7 +63,6 @@ class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: "java",
       theme: "tomorrow_night_blue",
       fontSize: 16,
     };
@@ -85,25 +84,25 @@ class Editor extends Component {
     this.handleOnChange = this.handleOnChange.bind(this);
   }
   handleOnChange(e, data) {
-    console.log(data);
     if (data.placeholder === "Theme") {
       this.setState({ theme: data.value });
     } else if (data.placeholder === "Font Size") {
       this.setState({ fontSize: parseInt(data.value) });
     } else if (data.placeholder === "Language") {
-      this.setState({ mode: data.value });
+      this.props.onChangeMode(data.value);
     }
   }
   render() {
     return (
       <React.Fragment>
         <ConfigBar
-          defaultMode={this.state.mode}
+          mode={this.props.mode}
+          status={this.props.status}
           handleOnChange={this.handleOnChange}
           languages={lang}
           fontSizes={font}
           themes={theme}
-          handleRunClick={() => this.props.handleRunClick(this.state.mode)}
+          handleRunClick={() => this.props.handleRunClick()}
         />
         <SplitPane
           split="vertical"
@@ -117,7 +116,7 @@ class Editor extends Component {
               <div className="text">CODE HERE</div>
             </div>
             <AceEditor
-              mode={this.state.mode}
+              mode={this.props.mode}
               theme={this.state.theme}
               fontSize={this.state.fontSize}
               value={this.props.code}
@@ -139,7 +138,7 @@ class Editor extends Component {
                 <div className="text">INPUT</div>
               </div>
               <AceEditor
-                mode={this.state.mode}
+                mode={"text"}
                 theme={this.state.theme}
                 fontSize={this.state.fontSize}
                 value={this.props.input}
@@ -160,7 +159,7 @@ class Editor extends Component {
                 <div className="text">OUTPUT</div>
               </div>
               <AceEditor
-                mode={this.state.mode}
+                mode={"text"}
                 theme={this.state.theme}
                 fontSize={this.state.fontSize}
                 value={this.props.output}
