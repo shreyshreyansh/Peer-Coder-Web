@@ -103,12 +103,13 @@ class Editor extends Component {
           languages={lang}
           fontSizes={font}
           themes={theme}
+          handleRunClick={() => this.props.handleRunClick(this.state.mode)}
         />
         <SplitPane
           split="vertical"
           minSize={100}
           maxSize={window.innerWidth - 50}
-          defaultSize={window.innerWidth * 0.7}
+          defaultSize={window.innerWidth * 0.5}
           style={{ height: "65vh" }}
         >
           <div>
@@ -122,9 +123,10 @@ class Editor extends Component {
               value={this.props.code}
               onChange={(data) => this.props.onChangeCode(data)}
               width={"100vw"}
-              height={"70vh"}
+              height={"61.4vh"}
               showGutter={true}
-              editorProps={{ $blockScrolling: true }}
+              useWorker={false}
+              editorProps={{ $blockScrolling: false }}
               setOptions={{
                 enableLiveAutocompletion: true,
                 enableSnippets: true,
@@ -143,9 +145,10 @@ class Editor extends Component {
                 value={this.props.input}
                 onChange={(data) => this.props.onChangeInput(data)}
                 width={"100vw"}
-                height={"30vh"}
+                height={"28vh"}
                 showGutter={true}
-                editorProps={{ $blockScrolling: true }}
+                useWorker={false}
+                editorProps={{ $blockScrolling: false }}
                 setOptions={{
                   enableLiveAutocompletion: true,
                   enableSnippets: true,
@@ -163,10 +166,11 @@ class Editor extends Component {
                 value={this.props.output}
                 onChange={(data) => this.props.onChangeOutput(data)}
                 width={"100vw"}
-                height={"40vh"}
+                height={"32vh"}
                 readOnly={true}
                 showGutter={true}
-                editorProps={{ $blockScrolling: true }}
+                useWorker={false}
+                editorProps={{ $blockScrolling: false }}
                 setOptions={{
                   enableLiveAutocompletion: true,
                   enableSnippets: true,

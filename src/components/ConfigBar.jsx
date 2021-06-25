@@ -30,6 +30,9 @@ class ConfigBar extends Component {
           onChange={(e, data) => this.props.handleOnChange(e, data)}
           defaultValue={this.props.fontSizes[4].value}
         />
+        <button className="run" onClick={() => this.props.handleRunClick()}>
+          Run
+        </button>
       </div>
     );
   }

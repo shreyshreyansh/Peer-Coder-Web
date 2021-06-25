@@ -5,6 +5,7 @@ import Editor from "./Editor";
 import Footer from "./Footer";
 import io from "socket.io-client";
 import Peer from "peerjs";
+import axios from "axios";
 import "../css/App.css";
 const myPeer = new Peer();
 const socket = io("https://peaceful-depths-33963.herokuapp.com/");
@@ -26,6 +27,7 @@ class App extends Component {
     this.handleChangeCode = this.handleChangeCode.bind(this);
     this.handleChangeInput = this.handleChangeInput.bind(this);
     this.handleChangeOutput = this.handleChangeOutput.bind(this);
+    this.handleRunClick = this.handleRunClick.bind(this);
   }
   componentDidMount() {
     myPeer.on("open", (id) => {
@@ -165,6 +167,66 @@ class App extends Component {
       newOutput: newOutput,
     });
   }
+  handleRunClick(mode) {
+    const params = {
+      source_code: this.state.code,
+      language: mode,
+      input: this.state.input,
+      api_key: "guest",
+    };
+    axios.post(`https://api.paiza.io/runners/create`, params).then((res) => {
+      const query = new URLSearchParams({
+        id: res.data.id,
+        api_key: "guest",
+      });
+      // your callback gets executed automatically once the data is received
+      var callback = (res, error) => {
+        // consume data
+        if (error) {
+          console.error(error);
+          return;
+        }
+        let output = "";
+        if (res.data.stdout) output += res.data.stdout;
+        if (res.data.stderr) output += res.data.stderr;
+        if (res.data.build_stderr) output += res.data.build_stderr;
+        this.setState({ output: output });
+      };
+
+      request(10, callback);
+      function request(retries, callback) {
+        axios
+          .get(`https://api.paiza.io/runners/get_details?${query.toString()}`)
+          .then((response) => {
+            // request successful
+
+            if (response.data.status === "completed") {
+              // server done, deliver data to script to consume
+              callback(response);
+            } else {
+              if (retries > 0) {
+                request(--retries, callback);
+              } else {
+                // no retries left, calling callback with error
+                callback([], "out of retries");
+              }
+            }
+          })
+          .catch((error) => {
+            // ajax error occurred
+            // would be better to not retry on 404, 500 and other unrecoverable HTTP errors
+            // retry, if any retries left
+            if (retries > 0) {
+              request(--retries, callback);
+            } else {
+              // no retries left, calling callback with error
+              callback([], error);
+            }
+          });
+      }
+    });
+    //console.log(params);
+  }
 
   render() {
     return (
@@ -183,6 +245,7 @@ class App extends Component {
           onChangeCode={this.handleChangeCode}
           onChangeInput={this.handleChangeInput}
           onChangeOutput={this.handleChangeOutput}
+          handleRunClick={this.handleRunClick}
         />
         <Footer />
       </React.Fragment>
