@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/Peer-Coder-Web/static/css/main.2e17cd0d.chunk.css",
-    "main.js": "/Peer-Coder-Web/static/js/main.797840da.chunk.js",
-    "main.js.map": "/Peer-Coder-Web/static/js/main.797840da.chunk.js.map",
+    "main.js": "/Peer-Coder-Web/static/js/main.91098dcf.chunk.js",
+    "main.js.map": "/Peer-Coder-Web/static/js/main.91098dcf.chunk.js.map",
     "runtime-main.js": "/Peer-Coder-Web/static/js/runtime-main.37ec5544.js",
     "runtime-main.js.map": "/Peer-Coder-Web/static/js/runtime-main.37ec5544.js.map",
-    "static/js/2.71a0fa29.chunk.js": "/Peer-Coder-Web/static/js/2.71a0fa29.chunk.js",
-    "static/js/2.71a0fa29.chunk.js.map": "/Peer-Coder-Web/static/js/2.71a0fa29.chunk.js.map",
+    "static/js/2.93a8b861.chunk.js": "/Peer-Coder-Web/static/js/2.93a8b861.chunk.js",
+    "static/js/2.93a8b861.chunk.js.map": "/Peer-Coder-Web/static/js/2.93a8b861.chunk.js.map",
     "mode-livescript.js": "/Peer-Coder-Web/00f32d088488515ac84b1ffe7fc0ec0d.js",
     "ftl.js": "/Peer-Coder-Web/024358f71f8096dd8052103dced05dbc.js",
     "mode-terraform.js": "/Peer-Coder-Web/02a3067bd4d8feab048883fbaff9722c.js",
@@ -423,12 +423,12 @@
     "io.js": "/Peer-Coder-Web/ffb285847c77432bb38e9fbf9789d323.js",
     "index.html": "/Peer-Coder-Web/index.html",
     "static/css/main.2e17cd0d.chunk.css.map": "/Peer-Coder-Web/static/css/main.2e17cd0d.chunk.css.map",
-    "static/js/2.71a0fa29.chunk.js.LICENSE.txt": "/Peer-Coder-Web/static/js/2.71a0fa29.chunk.js.LICENSE.txt"
+    "static/js/2.93a8b861.chunk.js.LICENSE.txt": "/Peer-Coder-Web/static/js/2.93a8b861.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.37ec5544.js",
-    "static/js/2.71a0fa29.chunk.js",
+    "static/js/2.93a8b861.chunk.js",
     "static/css/main.2e17cd0d.chunk.css",
-    "static/js/main.797840da.chunk.js"
+    "static/js/main.91098dcf.chunk.js"
   ]
 }
