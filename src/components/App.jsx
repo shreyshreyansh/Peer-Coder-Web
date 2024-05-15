@@ -11,7 +11,8 @@ import "../css/App.css";
 const myPeer = new Peer();
 // https://peaceful-depths-33963.herokuapp.com/
 // http://localhost:4000
-const socket = io("https://peaceful-depths-33963.herokuapp.com/");
+// https://peer-coder-u8z6.onrender.com/
+const socket = io("https://peer-coder-u8z6.onrender.com/");
 const peers = {};
 
 class App extends Component {
